@@ -1,7 +1,10 @@
 package io.dedale;
 
+import io.dedale.cli.ApplicationCommandLineRunner;
+
 public class App {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        new ApplicationCommandLineRunner().run();
     }
+
 }
