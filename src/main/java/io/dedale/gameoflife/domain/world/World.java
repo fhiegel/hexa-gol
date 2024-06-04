@@ -2,10 +2,7 @@ package io.dedale.gameoflife.domain.world;
 
 import io.dedale.gameoflife.domain.Cell;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public final class World {
     private final int width;
@@ -18,12 +15,22 @@ public final class World {
     }
 
     public World put(int x, int y, Cell cell) {
-        tiles.put(Coordinates.of(x, y), new Tile());
+        tiles.put(Coordinates.of(x, y), new Tile(cell));
         return this;
     }
 
     public Optional<Tile> getTileAt(int x, int y) {
-        return Optional.ofNullable(tiles.get(Coordinates.of(x, y)));
+        return getTileAt(Coordinates.of(x, y));
+    }
+
+    private Optional<Tile> getTileAt(Coordinates coordinates) {
+        return Optional.ofNullable(tiles.get(coordinates));
+    }
+
+    public Tiles getNeighborsOf(int x, int y) {
+        return new Tiles(Coordinates.of(x, y).neighbors().stream()
+                .flatMap(coordinates -> getTileAt(coordinates).stream())
+                .toList());
     }
 
     public int width() {
@@ -54,5 +61,4 @@ public final class World {
                "width=" + width + ", " +
                "height=" + height + ']';
     }
-
 }

@@ -61,15 +61,44 @@ class GameCommandLineAdapterTest {
     }
 
     @Test
+    void update_custom_3x3_game_with_oscillator() {
+        World world = new World(3, 3)
+                .put(1, 0, Cell.alive())
+                .put(1, 1, Cell.alive())
+                .put(1, 2, Cell.alive());
+        GameCommandLineAdapter adapter = new GameCommandLineAdapter(new Game(world));
+
+        assertThat(adapter.displayGame())
+                .isEqualTo("""
+                        ...
+                        ***
+                        ...
+                        """);
+
+        adapter.update();
+
+        assertThat(adapter.displayGame())
+                .isEqualTo("""
+                        .*.
+                        .*.
+                        .*.
+                        """);
+    }
+
+    @Test
     void update_game_once() {
-        GameCommandLineAdapter game = new GameCommandLineAdapter();
+        World world = new World(2, 2)
+                .put(0, 0, Cell.alive());
+        Game game = new Game(world);
+        GameCommandLineAdapter gameAdapter = new GameCommandLineAdapter(game);
 
-        game.update();
+        gameAdapter.update();
 
-        assertThat(game.displayGame())
+        assertThat(gameAdapter.displayGame())
                 .isEqualToIgnoringNewLines(
                         """
-                                .
+                                ..
+                                ..
                                 """);
     }
 }

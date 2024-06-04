@@ -1,6 +1,13 @@
 package io.dedale.gameoflife.domain.world;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.function.Predicate.not;
 
 public final class Coordinates {
     private final int x;
@@ -13,6 +20,14 @@ public final class Coordinates {
 
     public static Coordinates of(int x, int y) {
         return new Coordinates(x, y);
+    }
+
+    public Collection<Coordinates> neighbors() {
+        return IntStream.rangeClosed(x - 1, x + 1)
+                .boxed()
+                .flatMap(xx -> IntStream.rangeClosed(y - 1, y + 1).mapToObj(yy -> new Coordinates(xx, yy)))
+                .filter(not(this::equals))
+                .toList();
     }
 
     @Override
@@ -35,5 +50,4 @@ public final class Coordinates {
                "x=" + x + ", " +
                "y=" + y + ']';
     }
-
 }
